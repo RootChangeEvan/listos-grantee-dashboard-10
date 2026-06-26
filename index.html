@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Listos Grantee Network Dashboard — 2025</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #1B2A3B;
+    --navy-mid: #243447;
+    --green: #1D9E75;
+    --green-light: #E1F5EE;
+    --green-dark: #0F6E56;
+    --amber: #BA7517;
+    --amber-light: #FAEEDA;
+    --coral: #D85A30;
+    --coral-light: #FAECE7;
+    --ink: #1B2A3B;
+    --muted: #5F7080;
+    --border: #D8DEE4;
+    --bg: #F5F7F9;
+    --white: #FFFFFF;
+    --row-alt: #F8FAFB;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--navy);
+    color: white;
+    padding: 18px 28px;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+  header h1 {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: .01em;
+  }
+  header .sub {
+    font-size: 12px;
+    opacity: .55;
+  }
+  .listos-badge {
+    margin-left: auto;
+    font-size: 11px;
+    opacity: .4;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  /* ── LAYOUT ── */
+  .layout {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 0;
+    flex: 1;
+    min-height: 0;
+  }
+
+  /* ── LEFT PANEL ── */
+  .left {
+    background: var(--navy);
+    color: white;
+    padding: 24px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+  }
+
+  .panel-label {
+    font-size: 10px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    opacity: .4;
+    margin-bottom: 2px;
+  }
+
+  /* hero stat */
+  .hero-stat {
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 10px;
+    padding: 18px 20px;
+  }
+  .hero-num {
+    font-size: 52px;
+    font-weight: 300;
+    line-height: 1;
+    color: var(--green);
+    letter-spacing: -.02em;
+  }
+  .hero-desc {
+    font-size: 13px;
+    opacity: .7;
+    margin-top: 6px;
+    line-height: 1.5;
+  }
+  .hero-compare {
+    margin-top: 14px;
+    font-size: 11px;
+    opacity: .5;
+    border-top: 1px solid rgba(255,255,255,.1);
+    padding-top: 10px;
+  }
+
+  /* mini stats row */
+  .mini-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .mini-stat {
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 8px;
+    padding: 14px 14px;
+  }
+  .mini-num {
+    font-size: 28px;
+    font-weight: 300;
+    line-height: 1;
+    color: #7DD9BC;
+  }
+  .mini-label {
+    font-size: 11px;
+    opacity: .55;
+    margin-top: 5px;
+    line-height: 1.4;
+  }
+
+  /* chart bar */
+  .chart-section { }
+  .chart-title {
+    font-size: 11px;
+    opacity: .5;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .bar-pair {
+    margin-bottom: 12px;
+  }
+  .bar-pair-label {
+    font-size: 12px;
+    opacity: .7;
+    margin-bottom: 4px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .bar-track {
+    background: rgba(255,255,255,.1);
+    border-radius: 3px;
+    height: 8px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 3px;
+  }
+
+  /* silo callout */
+  .silo-box {
+    background: rgba(216, 90, 48, .12);
+    border: 1px solid rgba(216, 90, 48, .3);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .silo-num {
+    font-size: 36px;
+    font-weight: 300;
+    color: #F4956E;
+    line-height: 1;
+  }
+  .silo-label {
+    font-size: 12px;
+    color: rgba(255,255,255,.6);
+    margin-top: 5px;
+    line-height: 1.5;
+  }
+  .silo-note {
+    margin-top: 10px;
+    font-size: 11px;
+    color: rgba(255,255,255,.4);
+    line-height: 1.5;
+    border-top: 1px solid rgba(216,90,48,.2);
+    padding-top: 10px;
+  }
+
+  /* ── RIGHT PANEL ── */
+  .right {
+    background: var(--white);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .table-controls {
+    padding: 16px 20px 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .table-controls input {
+    padding: 7px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 13px;
+    color: var(--ink);
+    background: var(--bg);
+    outline: none;
+    width: 200px;
+  }
+  .table-controls input:focus { border-color: var(--green); }
+
+  .filter-group {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: white;
+    font-size: 12px;
+    cursor: pointer;
+    color: var(--muted);
+    transition: all .15s;
+  }
+  .filter-btn:hover { border-color: var(--green); color: var(--green-dark); }
+  .filter-btn.active { background: var(--navy); color: white; border-color: var(--navy); }
+
+  .count-label {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* table */
+  .table-wrap {
+    overflow-y: auto;
+    flex: 1;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  thead th {
+    background: var(--bg);
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  thead th:hover { color: var(--ink); }
+  thead th.sorted { color: var(--green-dark); }
+  thead th .sort-arrow { opacity: .4; margin-left: 3px; }
+  thead th.sorted .sort-arrow { opacity: 1; }
+
+  tbody tr {
+    border-bottom: 1px solid #EEF1F4;
+    transition: background .1s;
+  }
+  tbody tr:hover { background: #F0FBF7; }
+  tbody tr.core-row { background: #F8FEFB; }
+  tbody tr.core-row:hover { background: #EAF9F3; }
+
+  td {
+    padding: 10px 14px;
+    vertical-align: middle;
+  }
+
+  .org-name {
+    font-size: 13px;
+    color: var(--ink);
+    font-weight: 500;
+    max-width: 280px;
+  }
+
+  /* cycle pills */
+  .cycle-pills { display: flex; gap: 4px; flex-wrap: wrap; }
+  .cpill {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 8px;
+    font-weight: 600;
+    letter-spacing: .02em;
+  }
+  .cpill-3 { background: #E8F4FD; color: #1A5A8A; }
+  .cpill-4 { background: #EDE8FD; color: #4A2A9A; }
+  .cpill-5 { background: #E1F5EE; color: #0F6E56; }
+
+  /* bucket badge */
+  .bucket-badge {
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 6px;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+  .bucket-core { background: var(--green-light); color: var(--green-dark); }
+  .bucket-other { background: #F1EFE8; color: #5F5E5A; }
+
+  /* degree cell */
+  .deg-cell { display: flex; align-items: center; gap: 8px; }
+  .deg-bar-bg { width: 50px; height: 6px; background: #EEF1F4; border-radius: 3px; overflow: hidden; }
+  .deg-bar-fill { height: 100%; border-radius: 3px; background: var(--green); }
+  .deg-num { font-variant-numeric: tabular-nums; min-width: 16px; color: var(--ink); font-weight: 500; }
+
+  /* persist */
+  .persist-yes { color: var(--green-dark); font-weight: 600; font-size: 13px; }
+  .persist-no  { color: var(--muted); font-size: 13px; }
+
+  /* g2g */
+  .g2g-yes { color: var(--amber); font-weight: 600; }
+  .g2g-no  { color: #CCC; }
+
+  /* empty state */
+  .empty-state {
+    padding: 48px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <img src="https://www.listoscalifornia.org/wp-content/uploads/2026/02/cropped-Listos2025-ReadyCALogo.png" 
+       alt="Listos California" style="height:52px; width:52px; border-radius:8px; object-fit:cover; flex-shrink:0;">
+  <h1>Grantee Network Report</h1>
+  <span class="sub">2023 · 2024 · 2025 &nbsp;·&nbsp; 123 funded organizations</span>
+  <span class="listos-badge">Valley Vision · Internal</span>
+</header>
+
+<div class="layout">
+
+  <!-- LEFT PANEL -->
+  <div class="left">
+
+    <div class="panel-label">Key findings</div>
+
+    <!-- Hero: degree -->
+    <div class="hero-stat">
+      <div style="font-size:12px; opacity:.5; margin-bottom:6px; letter-spacing:.03em;">Grantees are</div>
+      <div class="hero-num">3.9×</div>
+      <div class="hero-desc">more connected than non-grantees across all survey years</div>
+      <div class="hero-compare">avg 8.2 vs 2.1 across all survey years</div>
+    </div>
+
+    <!-- 4x stat -->
+    <div class="hero-stat">
+      <div style="font-size:12px; opacity:.5; margin-bottom:6px; letter-spacing:.03em;">Grantees are</div>
+      <div class="hero-num">5.6×</div>
+      <div class="hero-desc">more likely to stay in the network 2023 → 2025</div>
+      <div class="hero-compare">50% of grantees persist vs 9% of non-grantees</div>
+    </div>
+
+    <!-- Data note -->
+    <div class="silo-box">
+      <div class="silo-num" style="font-size:18px; color:rgba(255,255,255,0.5); font-weight:400;">Data note</div>
+      <div class="silo-note" style="border-top:none; padding-top:6px; margin-top:6px;">58 grantees have no connections in any survey year — they received funding but were never survey respondents and never named as partners. An additional ~20 appear in the network under a different name form and have been reconciled.</div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right">
+
+    <div class="table-controls">
+      <input type="text" id="search" placeholder="Search grantees…" oninput="applyFilters()">
+      <div class="filter-group">
+        <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">All (123)</button>
+        <button class="filter-btn" data-filter="3.0" onclick="setFilter('3.0')">3.0 Grantees (71)</button>
+        <button class="filter-btn" data-filter="4.0" onclick="setFilter('4.0')">4.0 Grantees (58)</button>
+        <button class="filter-btn" data-filter="5.0" onclick="setFilter('5.0')">5.0 Grantees (31)</button>
+      </div>
+      <span class="count-label" id="count-label">123 orgs</span>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th onclick="sortBy('name')" data-col="name">Organization <span class="sort-arrow">↕</span></th>
+            <th onclick="sortBy('cycles')" data-col="cycles">Funding Cycles <span class="sort-arrow">↕</span></th>
+            <th onclick="sortBy('total_deg')" data-col="total_deg">Total Connections <span class="sort-arrow">↕</span></th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+      <div class="empty-state" id="empty" style="display:none">No grantees match this filter.</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const DATA = [{"name": "CORE Community Organized Relief Effort", "cycles": ["3.0", "4.0", "5.0"], "num_cycles": 3, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 35, "out_deg": 32, "in_deg": 3, "in_network_26": true, "persists": true, "g2g": 0, "network_name": "Community Organized Relief Effort (CORE)"}, {"name": "Buddhist Tzu Chi Foundation", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 35, "out_deg": 35, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Vision y Compromiso", "cycles": ["3.0", "4.0", "5.0"], "num_cycles": 3, "bucket": "Funded + Persistent Core", "is_core": true, "total_deg": 31, "out_deg": 29, "in_deg": 2, "in_network_26": true, "persists": false, "g2g": 0, "network_name": ""}, {"name": "United Way of Northern California", "cycles": ["3.0", "4.0"], "num_cycles": 2, "bucket": "Funded + Persistent Core", "is_core": true, "total_deg": 20, "out_deg": 19, "in_deg": 1, "in_network_26": true, "persists": true, "g2g": 0, "network_name": ""}, {"name": "Catholic Charities of California Inc.", "cycles": ["4.0"], "num_cycles": 1, "bucket": "Funded + Persistent Core", "is_core": true, "total_deg": 19, "out_deg": 17, "in_deg": 2, "in_network_26": true, "persists": false, "g2g": 0, "network_name": "Catholic Charities Of California"}, {"name": "Community Bridges", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded + Persistent Core", "is_core": true, "total_deg": 19, "out_deg": 12, "in_deg": 7, "in_network_26": true, "persists": true, "g2g": 0, "network_name": ""}, {"name": "Nuestra Comunidad", "cycles": ["4.0", "5.0"], "num_cycles": 2, "bucket": "Funded + Persistent Core", "is_core": true, "total_deg": 18, "out_deg": 13, "in_deg": 5, "in_network_26": true, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Tri-City Community Emergency Response Team Association", "cycles": ["4.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 18, "out_deg": 18, "in_deg": 0, "in_network_26": true, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Nuestra Comunidad (NC)", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded + Persistent Core", "is_core": true, "total_deg": 18, "out_deg": 13, "in_deg": 5, "in_network_26": true, "persists": false, "g2g": 0, "network_name": "Nuestra Comunidad"}, {"name": "San Jose Neighborhood Community Emergency Response Teams", "cycles": ["3.0", "4.0"], "num_cycles": 2, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 16, "out_deg": 16, "in_deg": 0, "in_network_26": true, "persists": false, "g2g": 0, "network_name": "San Jose Neighborhood Community Emergency Response Team (CERT)"}, {"name": "Grossman Burn Foundation", "cycles": ["4.0", "5.0"], "num_cycles": 2, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 15, "out_deg": 15, "in_deg": 0, "in_network_26": true, "persists": false, "g2g": 0, "network_name": ""}, {"name": "CERT Auxiliary of Santa Cruz County", "cycles": ["4.0"], "num_cycles": 1, "bucket": "Funded + Persistent Core", "is_core": true, "total_deg": 14, "out_deg": 14, "in_deg": 0, "in_network_26": true, "persists": true, "g2g": 1, "network_name": ""}, {"name": "United Ways of California", "cycles": ["4.0"], "num_cycles": 1, "bucket": "Funded + Persistent Core", "is_core": true, "total_deg": 14, "out_deg": 12, "in_deg": 2, "in_network_26": true, "persists": false, "g2g": 0, "network_name": ""}, {"name": "On The Move", "cycles": ["4.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 14, "out_deg": 14, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "United Policyholders", "cycles": ["4.0"], "num_cycles": 1, "bucket": "Funded + Persistent Core", "is_core": true, "total_deg": 13, "out_deg": 11, "in_deg": 2, "in_network_26": true, "persists": true, "g2g": 0, "network_name": ""}, {"name": "Equality California Institute", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 13, "out_deg": 13, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Lily of the Valley Church", "cycles": ["5.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 12, "out_deg": 12, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": "Lily Of The Valley Emmanuel Church Of Christ"}, {"name": "Lily of the Valley Emmanuel Church of Jesus Christ", "cycles": ["3.0", "4.0"], "num_cycles": 2, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 12, "out_deg": 12, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": "Lily Of The Valley Emmanuel Church Of Christ"}, {"name": "Down But Not Out", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded + Persistent Core", "is_core": true, "total_deg": 12, "out_deg": 12, "in_deg": 0, "in_network_26": true, "persists": true, "g2g": 0, "network_name": ""}, {"name": "Community Health Partnership of Santa Clara County", "cycles": ["5.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 11, "out_deg": 11, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": "Community Health Partnership Of Santa Clara County, Inc."}, {"name": "Community Health Partnership of Santa Clara County, Inc.", "cycles": ["3.0", "4.0"], "num_cycles": 2, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 11, "out_deg": 11, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Trybe, Inc.", "cycles": ["3.0", "4.0"], "num_cycles": 2, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 10, "out_deg": 10, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Access California Services", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 10, "out_deg": 10, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Central City Neighborhood Partners", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded + Persistent Core", "is_core": true, "total_deg": 10, "out_deg": 10, "in_deg": 0, "in_network_26": true, "persists": true, "g2g": 0, "network_name": ""}, {"name": "Health Education Council", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded + Persistent Core", "is_core": true, "total_deg": 10, "out_deg": 9, "in_deg": 1, "in_network_26": true, "persists": true, "g2g": 0, "network_name": ""}, {"name": "Nehemiah Charitable Fund", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded + Persistent Core", "is_core": true, "total_deg": 10, "out_deg": 10, "in_deg": 0, "in_network_26": true, "persists": true, "g2g": 0, "network_name": ""}, {"name": "Community Emergency Response Volunteers of the Monterey Peninsula", "cycles": ["3.0", "4.0", "5.0"], "num_cycles": 3, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 9, "out_deg": 9, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Building Resilient Communities", "cycles": ["5.0"], "num_cycles": 1, "bucket": "Funded + Persistent Core", "is_core": true, "total_deg": 8, "out_deg": 6, "in_deg": 2, "in_network_26": true, "persists": true, "g2g": 0, "network_name": ""}, {"name": "Up Valley Family Centers of Napa County", "cycles": ["3.0", "4.0"], "num_cycles": 2, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 7, "out_deg": 5, "in_deg": 2, "in_network_26": false, "persists": false, "g2g": 0, "network_name": "Upvalley Family Centers"}, {"name": "North Coast Opportunities, Inc", "cycles": ["3.0", "4.0"], "num_cycles": 2, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 6, "out_deg": 0, "in_deg": 6, "in_network_26": false, "persists": false, "g2g": 0, "network_name": "North Coast Opportunities"}, {"name": "St. Barnabas Senior Services of Los Angeles", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 6, "out_deg": 5, "in_deg": 1, "in_network_26": false, "persists": false, "g2g": 0, "network_name": "St. Barnabas Senior Services"}, {"name": "Volunteer Center of Santa Cruz County", "cycles": ["5.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 5, "out_deg": 5, "in_deg": 0, "in_network_26": true, "persists": false, "g2g": 1, "network_name": ""}, {"name": "Blue Lake Rancheria", "cycles": ["3.0", "4.0", "5.0"], "num_cycles": 3, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 5, "out_deg": 2, "in_deg": 3, "in_network_26": true, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Center for Volunteer and Non Profit Leadership", "cycles": ["4.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 5, "out_deg": 4, "in_deg": 1, "in_network_26": false, "persists": false, "g2g": 0, "network_name": "Canter for Volunteers and Nonprofit Leadership (CVNL)"}, {"name": "Northridge Hospital Foundation", "cycles": ["4.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 5, "out_deg": 5, "in_deg": 0, "in_network_26": true, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Round Valley Indian Tribes", "cycles": ["4.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 5, "out_deg": 5, "in_deg": 0, "in_network_26": true, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Boys and Girls Club of Merced", "cycles": ["4.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 5, "out_deg": 5, "in_deg": 0, "in_network_26": true, "persists": false, "g2g": 0, "network_name": "Boys And Girls Club Of Merced County"}, {"name": "Center for Volunteer and Nonprofit Leadership", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 5, "out_deg": 4, "in_deg": 1, "in_network_26": false, "persists": false, "g2g": 0, "network_name": "Canter for Volunteers and Nonprofit Leadership (CVNL)"}, {"name": "Coalition for Humane Immigrant Rights", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 5, "out_deg": 5, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Nevada County United Way", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 5, "out_deg": 5, "in_deg": 0, "in_network_26": true, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Butte County Community Emergency Response Team", "cycles": ["4.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 4, "out_deg": 3, "in_deg": 1, "in_network_26": true, "persists": true, "g2g": 0, "network_name": "Butte County Community Emergency Response Team (CERT)"}, {"name": "San Francisco Community Agencies Responding to Disaster", "cycles": ["4.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 4, "out_deg": 0, "in_deg": 4, "in_network_26": true, "persists": true, "g2g": 0, "network_name": "SF Community Agencies Responding To Disaster (SFCARD)"}, {"name": "Girls Athletic Leadership Schools Los Angeles", "cycles": ["4.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 4, "out_deg": 4, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Todec Legal Center Perris", "cycles": ["3.0", "4.0", "5.0"], "num_cycles": 3, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 3, "out_deg": 3, "in_deg": 0, "in_network_26": true, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Cher-ae Heights Indian Community Of The Trinidad Rancheria", "cycles": ["5.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 3, "out_deg": 3, "in_deg": 0, "in_network_26": true, "persists": false, "g2g": 1, "network_name": ""}, {"name": "Chicken Ranch Rancheria of Me-Wuk Indians of California", "cycles": ["4.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 3, "out_deg": 3, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": "Chicken Ranch Rancheria Of Me Wuk Indians Of California"}, {"name": "Community Resources for Independent Living", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 3, "out_deg": 3, "in_deg": 0, "in_network_26": true, "persists": false, "g2g": 0, "network_name": "Community Resources For Independent Living (CRIL)"}, {"name": "Catholic Charities of Santa Clara County", "cycles": ["3.0", "4.0"], "num_cycles": 2, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 2, "out_deg": 0, "in_deg": 2, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Bryant Temple AME Community Development Corporation", "cycles": ["4.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 2, "out_deg": 2, "in_deg": 0, "in_network_26": true, "persists": false, "g2g": 0, "network_name": "Bryant Temple Community Development Corporation (CDC)"}, {"name": "Asian Health Services", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 2, "out_deg": 1, "in_deg": 1, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Asian Youth Center", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 2, "out_deg": 2, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Thai Community Development Center", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 2, "out_deg": 2, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Latino Coalition of San Benito County", "cycles": ["5.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 1, "out_deg": 1, "in_deg": 0, "in_network_26": true, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Catholic Charities San Bernardino & Riverside Counties", "cycles": ["5.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 1, "out_deg": 1, "in_deg": 0, "in_network_26": true, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Community Health Action Network", "cycles": ["5.0"], "num_cycles": 1, "bucket": "Funded + Persistent Core", "is_core": true, "total_deg": 1, "out_deg": 0, "in_deg": 1, "in_network_26": true, "persists": true, "g2g": 0, "network_name": ""}, {"name": "HDEAA Nonprofit Corp", "cycles": ["5.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 1, "out_deg": 1, "in_deg": 0, "in_network_26": true, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Vista Community Clinic", "cycles": ["5.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 1, "out_deg": 0, "in_deg": 1, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Bear River Band Of The Rohnerville Rancheria", "cycles": ["5.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 1, "out_deg": 0, "in_deg": 1, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Albany Fire Department", "cycles": ["4.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 1, "out_deg": 0, "in_deg": 1, "in_network_26": true, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Cloverdale Fire Protection District", "cycles": ["4.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 1, "out_deg": 0, "in_deg": 1, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Catholic Charities CYO of the Archdiocese of San Francisco", "cycles": ["3.0", "4.0"], "num_cycles": 2, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 1, "out_deg": 0, "in_deg": 1, "in_network_26": false, "persists": false, "g2g": 0, "network_name": "Catholic Charities Of San Francisco"}, {"name": "Healing Urban Barrios", "cycles": ["3.0", "4.0"], "num_cycles": 2, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 1, "out_deg": 0, "in_deg": 1, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Valley Onward", "cycles": ["3.0", "4.0"], "num_cycles": 2, "bucket": "Funded + Persistent Core", "is_core": true, "total_deg": 1, "out_deg": 0, "in_deg": 1, "in_network_26": true, "persists": true, "g2g": 0, "network_name": ""}, {"name": "Santa Maria, City of", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 1, "out_deg": 0, "in_deg": 1, "in_network_26": true, "persists": false, "g2g": 0, "network_name": "Santa Maria City"}, {"name": "North Valley Community Foundation", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 1, "out_deg": 0, "in_deg": 1, "in_network_26": true, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Fire Service Training Institute", "cycles": ["5.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Catholic Charities of the Diocese of Santa Rosa", "cycles": ["4.0", "5.0"], "num_cycles": 2, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Extrafood Org", "cycles": ["3.0", "5.0"], "num_cycles": 2, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Health Education Council Serving Populations at Risk", "cycles": ["5.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Sacramento District Council St. Vincent de Paul", "cycles": ["5.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Disability Resources Agency For Independent Living", "cycles": ["5.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Yosemite Sequoia Resource Conservation And Development Council", "cycles": ["5.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Asian Business Institute and Resource Center", "cycles": ["3.0", "5.0"], "num_cycles": 2, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Self-Help Enterprises", "cycles": ["3.0", "5.0"], "num_cycles": 2, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "El Sol Neighborhood Educational Center", "cycles": ["4.0", "5.0"], "num_cycles": 2, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Santa Barbara Foundation", "cycles": ["5.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Pauma Band of Mission Indians", "cycles": ["5.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Rincon Band of Luise\u00f1o Indians", "cycles": ["5.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Cathedral City, City of", "cycles": ["4.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "City of Norwalk", "cycles": ["3.0", "4.0"], "num_cycles": 2, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Friends of the Long Beach Firefighters", "cycles": ["3.0", "4.0"], "num_cycles": 2, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Gilroy, City of", "cycles": ["3.0", "4.0"], "num_cycles": 2, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Humboldt Bay Fire Joint Powers Authority", "cycles": ["4.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Kingsburg, City of", "cycles": ["3.0", "4.0"], "num_cycles": 2, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Lake California Community Emergency Response Team", "cycles": ["3.0", "4.0"], "num_cycles": 2, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "National City, City of", "cycles": ["3.0", "4.0"], "num_cycles": 2, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Perris, City of", "cycles": ["4.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Redding, City of", "cycles": ["4.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "San Diego County", "cycles": ["3.0", "4.0"], "num_cycles": 2, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Siskiyou County OES - Community Emergency Response Team", "cycles": ["4.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "South Lake Tahoe, City of", "cycles": ["4.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Superior Court of California, County of Orange", "cycles": ["4.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "St. Barnabas Senior Center of Los Angeles", "cycles": ["4.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Comite Civico del Valle, Inc.", "cycles": ["3.0", "4.0"], "num_cycles": 2, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Mixteco Inigena Community Organization Project", "cycles": ["4.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Scotts Vally Band of Pomo Indians", "cycles": ["4.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Boys & Girls Club of Laguna Beach", "cycles": ["4.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Concord, City of", "cycles": ["4.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Leadership Excellence and Development Foundation", "cycles": ["3.0", "4.0"], "num_cycles": 2, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Alhambra, City of", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Merced, City of", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Kern County", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Buellton, City of", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Poway, City of", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "La Habra Police Department", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "La Honda Fire Brigade", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "San Diego, City of", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Athlete and Entertainers for Kids", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "California State Alliance of YMCAs", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Catholic Charities of Los Angeles, Inc.", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Catholic Charities of the Diocese of Fresno", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Inland Southern California 211+", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "ProjectCamp", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "The California Fire Foundation", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Ohlone Tribe of Carmel First Settlers of Chino Valley, CA Inc.", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Healthy Community Forum for the Greater Sacramento Region", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Ukrainian American House", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "The Center for Independent Living, Inc.", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Fort Independence Indian Community", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Big Valley Band of Pomo Indians", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Hopland Band of Pomo Indians", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Enterprise Rancheria of Maidu Indians of California", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}, {"name": "Pala Band of Mission Indians", "cycles": ["3.0"], "num_cycles": 1, "bucket": "Funded \u00b7 Not in Core", "is_core": false, "total_deg": 0, "out_deg": 0, "in_deg": 0, "in_network_26": false, "persists": false, "g2g": 0, "network_name": ""}];
+
+const MAX_DEG = 35;
+let currentFilter = 'all';
+let sortCol = 'total_deg';
+let sortAsc = true;
+
+function setFilter(f) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.filter === f));
+  applyFilters();
+}
+
+function sortBy(col) {
+  if (sortCol === col) sortAsc = !sortAsc;
+  else { sortCol = col; sortAsc = col === 'name'; }
+  document.querySelectorAll('thead th').forEach(th => {
+    th.classList.toggle('sorted', th.dataset.col === col);
+    if (th.dataset.col === col) th.querySelector('.sort-arrow').textContent = sortAsc ? '↑' : '↓';
+    else th.querySelector('.sort-arrow').textContent = '↕';
+  });
+  applyFilters();
+}
+
+function applyFilters() {
+  const q = document.getElementById('search').value.toLowerCase();
+  let rows = DATA.filter(d => {
+    if (q && !d.name.toLowerCase().includes(q)) return false;
+    if (currentFilter === '3.0') return d.cycles.includes('3.0');
+    if (currentFilter === '4.0') return d.cycles.includes('4.0');
+    if (currentFilter === '5.0') return d.cycles.includes('5.0');
+    return true;
+  });
+
+  rows.sort((a, b) => {
+    let av = a[sortCol], bv = b[sortCol];
+    if (sortCol === 'name') { av = av.toLowerCase(); bv = bv.toLowerCase(); }
+    if (sortCol === 'cycles') { av = a.num_cycles; bv = b.num_cycles; }
+    if (av < bv) return sortAsc ? -1 : 1;
+    if (av > bv) return sortAsc ? 1 : -1;
+    return 0;
+  });
+
+  const tbody = document.getElementById('tbody');
+  tbody.innerHTML = '';
+  document.getElementById('empty').style.display = rows.length ? 'none' : 'block';
+
+  rows.forEach(d => {
+    const tr = document.createElement('tr');
+    if (d.is_core) tr.classList.add('core-row');
+
+    const cyclePills = d.cycles.map(c => {
+      const cls = c==='3.0'?'cpill-3':c==='4.0'?'cpill-4':'cpill-5';
+      return `<span class="cpill ${cls}">${c}</span>`;
+    }).join('');
+
+    const barW = d.total_deg > 0 ? Math.round((d.total_deg / MAX_DEG) * 100) : 0;
+    const degHtml = d.total_deg > 0
+      ? `<div class="deg-cell"><div class="deg-bar-bg"><div class="deg-bar-fill" style="width:${barW}%"></div></div><span class="deg-num">${d.total_deg}</span></div>`
+      : `<span style="color:#CCC; font-size:12px;">—</span>`;
+
+
+    tr.innerHTML = `
+      <td class="org-name">${d.name}${d.network_name ? `<div style="font-size:10px;color:var(--muted);margin-top:2px;">↳ surveyed as: ${d.network_name}</div>` : ''}</td>
+      <td><div class="cycle-pills">${cyclePills}</div></td>
+      <td>${degHtml}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  document.getElementById('count-label').textContent = `${rows.length} org${rows.length!==1?'s':''}`;
+}
+
+// init
+sortBy('total_deg'); // triggers toggle to false = descending
+</script>
+</body>
+</html>
